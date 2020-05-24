@@ -87,3 +87,12 @@ textForm.addEventListener('submit', e => {
 	speak();
 	textInput.blur();
 });
+
+//Rate Value Change
+rate.addEventListener('change', e => rateValue.textContent = rate.value);
+
+//Pitch Value Change
+pitch.addEventListener('change', e => pitchValue.textContent = pitch.value);
+
+//Voice Select Change
+voiceSelect.addEventListener('change', e => speak());
