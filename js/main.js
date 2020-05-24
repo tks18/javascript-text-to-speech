@@ -27,7 +27,7 @@ const getVoices = () => {
 
 		//Set Needed Option Atributes
 		option.setAttribute('data-lang', voice.lang);
-		option.setAttribute('data-lang', voice.name);
+		option.setAttribute('data-name', voice.name);
 		voiceSelect.appendChild(option);
 	})
 }
@@ -36,3 +36,54 @@ getVoices();
 if (synth.onvoiceschanged !== undefined){
 	synth.onvoiceschanged = getVoices;
 }
+
+//Speak
+const speak = () => {
+	
+	//Check if Speaking
+	if(synth.speaking) {
+		console.error("Already Speaking");
+		return;
+	}
+	if(textInput.value !== '') {
+
+		// Get Speak Text
+		const speakText = new SpeechSynthesisUtterance(textInput.value);
+
+		//Speak End
+		speakText.onend = e => {
+			console.log('Done Speaking....');
+		}
+
+		//Speak Error
+		speakText.onerror = e => {
+			console.error("Somenthing Went Wrong");
+		}
+
+		//Selected Voice
+		const selectedVoice = voiceSelect.selectedOptions[0].getAttribute('data-name')
+
+		// Loop through Voices
+		voices.forEach(voice => {
+			if (voice.name === selectedVoice) {
+				speakText.voice = voice;
+			}
+		});
+
+		//Set Pitch and Rate
+		speakText.rate = rate.value;
+		speakText.pitch = pitch.value;
+
+		//Speak the Text
+		synth.speak(speakText);
+	}
+};
+
+//Event Listeners
+
+//Text Form Submit
+textForm.addEventListener('submit', e => {
+	e.preventDefault();
+	speak();
+	textInput.blur();
+});
