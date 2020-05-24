@@ -16,7 +16,23 @@ let voices = [];
 
 const getVoices = () => {
 	voices = synth.getVoices();
-	console.log(voices);
+	
+	// Loop through Voices and Create Options for Each Voice
+	voices.forEach((voice) => {
+		//Create Option Element
+		const option = document.createElement('option');
+
+		//Fill Option with Voice
+		option.textContent = voice.name + '('+ voice.lang +')';
+
+		//Set Needed Option Atributes
+		option.setAttribute('data-lang', voice.lang);
+		option.setAttribute('data-lang', voice.name);
+		voiceSelect.appendChild(option);
+	})
 }
 
 getVoices();
+if (synth.onvoiceschanged !== undefined){
+	synth.onvoiceschanged = getVoices;
+}
